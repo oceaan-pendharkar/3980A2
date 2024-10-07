@@ -64,19 +64,64 @@ void read_string_from_fd(const unsigned long length, const int *fd, int *err)
     free(output);
 }
 
-char *initialize_input_string(const char *filter_type, const char *message, int *err)
+char *initialize_input_string(const Client_Settings *settings, int *err)
 {
     char *input = (char *)malloc(LIMIT * sizeof(char));
     if(input == NULL)
     {
-        printf("Memory allocation failed\n");
+        printf("Memory allocatio_ failed\n");
         *err = -2;
-        return 0;
+        return NULL;
     }
-    input[0] = *filter_type;
+    input[0] = settings->filter_type;
     input[1] = DELIMITER;
-    strcat(input, message);
+    strcat(input, settings->message);
     return input;
+}
+
+void initialize_fifos(Client_Settings *settings)
+{
+    settings->inputFifo  = "/tmp/inputfifo";
+    settings->outputFifo = "/tmp/outputfifo";
+}
+
+void cleanup(Client_Settings *settings)
+{
+    free(settings->server_input);
+}
+
+void send_server_request(Client_Settings *settings)
+{
+    settings->fd = open(settings->inputFifo, O_WRONLY | O_CLOEXEC);
+    if(settings->fd < 0)
+    {
+        printf("Error opening input fifo for writing");
+        settings->exit_flag = -3;
+        free(settings->server_input);
+        return;
+    }
+
+    write_string_to_fd(settings->server_input, &settings->fd, &settings->exit_flag);
+    if(settings->exit_flag != 0)
+    {
+        return;
+    }
+}
+
+void receive_server_response(Client_Settings *settings)
+{
+    settings->fd = open(settings->outputFifo, O_RDONLY | O_CLOEXEC);
+    if(settings->fd < 0)
+    {
+        printf("Error opening output fifo for reading");
+        settings->exit_flag = -3;
+        return;
+    }
+    read_string_from_fd(strlen(settings->message), &settings->fd, &settings->exit_flag);
+    if(settings->exit_flag != 0)
+    {
+        return;
+    }
 }
 
 // exit values
@@ -88,58 +133,29 @@ char *initialize_input_string(const char *filter_type, const char *message, int 
 int main(int argc, char *argv[])
 {
     Client_Settings settings;
-    const char     *inputFifo  = "/tmp/inputfifo";
-    const char     *outputFifo = "/tmp/outputfifo";
-    int             fd;
-    char           *input;
-    int             exit_flag = 0;
+    initialize_fifos(&settings);
 
-    exit_flag = parse_arguments(argc, argv, &settings);
-    if(exit_flag == -1)
+    settings.exit_flag = parse_arguments(argc, argv, &settings);
+    if(settings.exit_flag == -1)
     {
         goto done;
     }
 
-    input = initialize_input_string(&settings.filter_type, settings.message, &exit_flag);
-    if(exit_flag != 0)
+    settings.server_input = initialize_input_string(&settings, &settings.exit_flag);
+    if(settings.exit_flag != 0)
     {
-        free(input);
+        cleanup(&settings);
         goto done;
     }
 
-    fd = open(inputFifo, O_WRONLY | O_CLOEXEC);
-    if(fd < 0)
+    send_server_request(&settings);
+    if(settings.exit_flag != 0)
     {
-        printf("Error opening input fifo for writing");
-        exit_flag = -3;
-        free(input);
         goto done;
-    }
-    else
-    {
-        write_string_to_fd(input, &fd, &exit_flag);
-        if(exit_flag != 0)
-        {
-            goto done;
-        }
     }
 
-    fd = open(outputFifo, O_RDONLY | O_CLOEXEC);
-    if(fd < 0)
-    {
-        printf("Error opening output fifo for reading");
-        exit_flag = -3;
-        goto done;
-    }
-    else
-    {
-        read_string_from_fd(strlen(settings.message), &fd, &exit_flag);
-        if(exit_flag != 0)
-        {
-            goto done;
-        }
-    }
+    receive_server_response(&settings);
 
 done:
-    return exit_flag;
+    return settings.exit_flag;
 }
