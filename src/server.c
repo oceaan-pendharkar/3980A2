@@ -164,8 +164,6 @@ static void setup_signal_handler(void)
 
     memset(&sa, 0, sizeof(sa));
 
-    sa.sa_handler = handle_sigint;
-
     if(sigaction(SIGINT, &sa, NULL) == -1)
     {
         perror("sigaction");
