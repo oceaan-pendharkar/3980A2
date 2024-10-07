@@ -40,14 +40,13 @@ void *process_client(void *arg)
     const thread_data_t    *data     = (thread_data_t *)arg;
     volatile int           *exit_ptr = &exit_flag;
     ssize_t                 n_read;
-    ssize_t                 n_wrote;
 
     fd = open(data->input_fifo, O_RDONLY | O_CLOEXEC);
     if(fd < 0)
     {
         printf("Error opening input fifo");
         exit_flag = -3;
-        return NULL;
+        goto done;
     }
 
     input = (char *)malloc(LIMIT * sizeof(char));
@@ -55,7 +54,7 @@ void *process_client(void *arg)
     {
         printf("Memory allocation failed\n");
         exit_flag = -2;
-        return NULL;
+        goto done;
     }
     n_read = read(fd, input, LIMIT);
     if(n_read == -1)
@@ -65,13 +64,13 @@ void *process_client(void *arg)
             printf("Exiting due to SIGINT\n");
             free(input);
             close(fd);
-            return NULL;
+            goto done;
         }
         printf("writing failed");
         exit_flag = -4;
         free(input);
         close(fd);
-        return NULL;
+        goto done;
     }
     printf("input: %s\n", input);
     close(fd);
@@ -107,7 +106,7 @@ void *process_client(void *arg)
     }
     else
     {
-        n_wrote = write(fd, output, strlen(output) + 1);
+        ssize_t n_wrote = write(fd, output, strlen(output) + 1);
         if(n_wrote < 0)
         {
             printf("writing failed\n");
@@ -117,6 +116,7 @@ void *process_client(void *arg)
     }
     free(output);
     free(input);
+done:
     return NULL;
 }
 
