@@ -6,6 +6,7 @@
 #define FILTER_H
 
 #include <ctype.h>
+#include <stddef.h>
 
 typedef char (*filter_func)(char);
 
