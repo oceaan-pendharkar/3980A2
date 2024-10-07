@@ -55,7 +55,7 @@ void *process_client(void *arg)
     {
         printf("Memory allocation failed\n");
         exit_flag = -2;
-        goto done;
+        return NULL;
     }
     n_read = read(fd, input, LIMIT);
     if(n_read == -1)
@@ -117,7 +117,6 @@ void *process_client(void *arg)
     }
     free(output);
     free(input);
-done:
     return NULL;
 }
 
