@@ -7,7 +7,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#define LIMIT 100
 #define DELIMITER '|'
 
 int parse_arguments(int argc, char *args[], Client_Settings *settings)
@@ -66,7 +65,7 @@ void read_string_from_fd(const unsigned long length, const int *fd, int *err)
 
 char *initialize_input_string(const Client_Settings *settings, int *err)
 {
-    char *input = (char *)malloc(LIMIT * sizeof(char));
+    char *input = (char *)malloc((strlen(settings->message) + 3) * sizeof(char));
     if(input == NULL)
     {
         printf("Memory allocatio_ failed\n");
