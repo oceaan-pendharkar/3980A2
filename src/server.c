@@ -18,17 +18,19 @@ static volatile sig_atomic_t exit_flag = 0;    // NOLINT(cppcoreguidelines-avoid
 
 char *get_message_content(const char *msg)
 {
-    const size_t length      = strlen(msg) - 2;
-    char        *msg_content = (char *)malloc((length * sizeof(char)) + 1);
-    strncpy(msg_content, msg + 2, length + 2);
+    const size_t length      = strlen(msg);
+    char        *msg_content = (char *)malloc((length) * sizeof(char));
+    strncpy(msg_content, msg + 2, length - 2);
+    msg_content[length + 2] = '\0';
     return msg_content;
 }
 
 char *get_denied_message(void)
 {
     const long unsigned int length         = 7;
-    char                   *denied_message = (char *)malloc(length * sizeof(char));
+    char                   *denied_message = (char *)malloc((length) * sizeof(char));
     strlcpy(denied_message, "denied", length);
+    denied_message[length - 1] = '\0';
     return denied_message;
 }
 
