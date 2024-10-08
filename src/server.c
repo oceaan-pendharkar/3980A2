@@ -21,7 +21,7 @@ char *get_message_content(const char *msg)
     const size_t length      = strlen(msg);
     char        *msg_content = (char *)malloc((length) * sizeof(char));
     strncpy(msg_content, msg + 2, length - 2);
-    msg_content[length + 2] = '\0';
+    msg_content[length - 1] = '\0';
     return msg_content;
 }
 
