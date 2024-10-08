@@ -8,13 +8,13 @@
 #include <ctype.h>
 #include <stddef.h>
 
-typedef char (*filter_func)(char);
+typedef int (*filter_func)(char);
 
-char upper_filter(char character);
+int upper_filter(char character);
 
-char lower_filter(char character);
+int lower_filter(char character);
 
-char null_filter(char character);
+int null_filter(char character);
 
 char *filter_string(const char *input_string, const size_t length, volatile int *exit_flag, filter_func filter);
 

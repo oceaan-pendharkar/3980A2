@@ -2,19 +2,19 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-char upper_filter(char character)
+int upper_filter(char character)
 {
-    return (char)toupper(character);
+    return toupper(character);
 }
 
-char lower_filter(char character)
+int lower_filter(char character)
 {
-    return (char)tolower(character);
+    return tolower(character);
 }
 
-char null_filter(char character)
+int null_filter(char character)
 {
-    return character;
+    return (int)character;
 }
 
 char *filter_string(const char *input_string, const size_t length, volatile int *exit_flag, filter_func filter)
@@ -27,7 +27,7 @@ char *filter_string(const char *input_string, const size_t length, volatile int 
     }
     for(int i = 0; (size_t)i < length; i++)
     {
-        output_string[i] = filter(input_string[i]);
+        output_string[i] = (char)filter(input_string[i]);
     }
     output_string[length] = '\0';
     return output_string;
