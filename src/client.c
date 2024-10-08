@@ -3,8 +3,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/stat.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 #define LIMIT 100
@@ -42,7 +42,7 @@ int parse_arguments(int argc, char *args[], Client_Settings *settings)
 
 void write_string_to_fd(char *input, const int *fd, int *err)
 {
-    ssize_t n_wrote = write(*fd, input, strlen(input) + 1);
+    ssize_t n_wrote = write(*fd, input, strlen(input));
     if(n_wrote < 0)
     {
         *err = -4;
@@ -54,7 +54,7 @@ void write_string_to_fd(char *input, const int *fd, int *err)
 void read_string_from_fd(const unsigned long length, const int *fd, int *err)
 {
     char   *output = (char *)malloc(length * sizeof(char));
-    ssize_t n_read = read(*fd, output, length + 1);
+    ssize_t n_read = read(*fd, output, length);
     if(n_read < 0)
     {
         *err = -4;
@@ -75,7 +75,7 @@ char *initialize_input_string(const Client_Settings *settings, int *err)
     }
     input[0] = settings->filter_type;
     input[1] = DELIMITER;
-    strlcat(input, settings->message, strlen(settings->message));
+    strlcat(input, settings->message, strlen(settings->message) + 3);
     return input;
 }
 
