@@ -3,8 +3,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/stat.h>
+#include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
 #define LIMIT 100
@@ -75,7 +75,7 @@ char *initialize_input_string(const Client_Settings *settings, int *err)
     }
     input[0] = settings->filter_type;
     input[1] = DELIMITER;
-    strcat(input, settings->message);
+    strlcat(input, settings->message, strlen(settings->message));
     return input;
 }
 

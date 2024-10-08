@@ -28,7 +28,7 @@ char *get_denied_message(void)
 {
     const long unsigned int length         = 7;
     char                   *denied_message = (char *)malloc(length * sizeof(char));
-    strcpy(denied_message, "denied");
+    strlcpy(denied_message, "denied", strlen(denied_message));
     return denied_message;
 }
 
