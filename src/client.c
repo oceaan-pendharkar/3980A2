@@ -65,16 +65,18 @@ void read_string_from_fd(const unsigned long length, const int *fd, int *err)
 
 char *initialize_input_string(const Client_Settings *settings, int *err)
 {
-    char *input = (char *)malloc((strlen(settings->message) + 3) * sizeof(char));
+    const unsigned long NUM_EXTRA_CHARS_PLUS_TERMINATOR = 4;
+    char               *input                           = (char *)malloc((strlen(settings->message) + NUM_EXTRA_CHARS_PLUS_TERMINATOR) * sizeof(char));
     if(input == NULL)
     {
-        printf("Memory allocatio_ failed\n");
+        printf("Memory allocation failed\n");
         *err = -2;
         return NULL;
     }
     input[0] = settings->filter_type;
     input[1] = DELIMITER;
     strlcat(input, settings->message, strlen(settings->message) + 3);
+    input[strlen(settings->message) + NUM_EXTRA_CHARS_PLUS_TERMINATOR - 1] = '\0';
     return input;
 }
 

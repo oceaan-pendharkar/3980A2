@@ -73,6 +73,7 @@ void *process_client(void *arg)
         close(fd);
         goto done;
     }
+    input[n_read] = '\0';
     printf("input: %s\n", input);
     close(fd);
 
