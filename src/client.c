@@ -78,7 +78,6 @@ char *initialize_input_string(const Client_Settings *settings, int *err)
     input[1] = DELIMITER;
     input[2] = '\0';
     strlcat(input, settings->message, strlen(settings->message) + 3);
-            printf("input: %s\n", input);
     return input;
 }
 
