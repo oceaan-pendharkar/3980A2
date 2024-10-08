@@ -52,13 +52,14 @@ void write_string_to_fd(char *input, const int *fd, int *err)
 
 void read_string_from_fd(const unsigned long length, const int *fd, int *err)
 {
-    char   *output = (char *)malloc(length * sizeof(char));
+    char   *output = (char *)malloc((length + 1) * sizeof(char));
     ssize_t n_read = read(*fd, output, length);
     if(n_read < 0)
     {
         *err = -4;
     }
     close(*fd);
+    output[n_read] = '\0';
     printf("response from server: %s\n", output);
     free(output);
 }
