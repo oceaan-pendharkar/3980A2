@@ -76,8 +76,9 @@ char *initialize_input_string(const Client_Settings *settings, int *err)
     }
     input[0] = settings->filter_type;
     input[1] = DELIMITER;
+    input[2] = '\0';
     strlcat(input, settings->message, strlen(settings->message) + 3);
-    input[strlen(settings->message) + NUM_EXTRA_CHARS_PLUS_TERMINATOR - 1] = '\0';
+            printf("input: %s\n", input);
     return input;
 }
 
