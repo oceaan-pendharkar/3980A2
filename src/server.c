@@ -90,10 +90,6 @@ void *process_client(void *arg)
         {
             exit_flag = -2;
         }
-        else
-        {
-            printf("strlen(message_content): %d\n", (int)strlen(message_content));
-        }
 
         if(input[0] == 'u')
         {
@@ -123,8 +119,6 @@ void *process_client(void *arg)
     else
     {
         ssize_t n_wrote = write(fd, output, strlen(output));
-        printf("output: %s\n", output);
-        printf("strlen(output): %d\n", (int)sizeof(output));
 
         if(n_wrote < 0)
         {
