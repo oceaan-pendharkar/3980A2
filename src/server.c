@@ -82,7 +82,6 @@ void *process_client(void *arg)
     if(exit_flag == 0)
     {
         char *message_content = get_message_content(input);
-        printf("message content: %s\n", message_content);
         if(input[0] == 'u')
         {
             output = filter_string(message_content, strlen(message_content), exit_ptr, upper_filter);
