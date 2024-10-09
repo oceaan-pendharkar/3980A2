@@ -20,6 +20,10 @@ char *get_message_content(const char *msg)
 {
     const size_t length      = strlen(msg);
     char        *msg_content = (char *)malloc((length) * sizeof(char));
+    if(msg_content == NULL)
+    {
+        return NULL;
+    }
     strncpy(msg_content, msg + 2, length - 2);
     msg_content[length - 1] = '\0';
     return msg_content;
@@ -27,7 +31,7 @@ char *get_message_content(const char *msg)
 
 char *get_denied_message(void)
 {
-    const long unsigned int length         = 7;
+    const long unsigned int length         = 8;
     char                   *denied_message = (char *)malloc((length) * sizeof(char));
     strlcpy(denied_message, "denied", length);
     denied_message[length - 1] = '\0';
@@ -82,6 +86,15 @@ void *process_client(void *arg)
     if(exit_flag == 0)
     {
         char *message_content = get_message_content(input);
+        if(message_content == NULL)
+        {
+            exit_flag = -2;
+        }
+        else
+        {
+            printf("strlen(message_content): %d\n", (int)strlen(message_content));
+        }
+
         if(input[0] == 'u')
         {
             output = filter_string(message_content, strlen(message_content), exit_ptr, upper_filter);
@@ -109,7 +122,10 @@ void *process_client(void *arg)
     }
     else
     {
-        ssize_t n_wrote = write(fd, output, strlen(output) + 1);
+        ssize_t n_wrote = write(fd, output, strlen(output));
+        printf("output: %s\n", output);
+        printf("strlen(output): %d\n", (int)sizeof(output));
+
         if(n_wrote < 0)
         {
             printf("writing failed\n");
@@ -156,13 +172,13 @@ int parse_server_arguments(int argc, char *args[], thread_data_t *data)
     return 0;
 }
 
-void sigint_handler(int a)
+void sigint_handler(int signum)
 {
-    exit_flag = a;
+    exit_flag = signum;
 }
 
 /*
-* Author: D'Arcy Smith
+ * Author: D'Arcy Smith
  */
 static void setup_signal_handler(void)
 {

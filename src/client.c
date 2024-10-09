@@ -52,8 +52,8 @@ void write_string_to_fd(char *input, const int *fd, int *err)
 
 void read_string_from_fd(const unsigned long length, const int *fd, int *err)
 {
-    char   *output = (char *)malloc((length + 1) * sizeof(char));
-    ssize_t n_read = read(*fd, output, length);
+    char   *output = (char *)malloc((length + 2) * sizeof(char));
+    ssize_t n_read = read(*fd, output, length + 1);
     if(n_read < 0)
     {
         *err = -4;

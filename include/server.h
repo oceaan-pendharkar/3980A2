@@ -4,7 +4,6 @@
 
 typedef struct
 {
-
     // cppcheck-suppress unusedStructMember
     char *input_fifo;
     // cppcheck-suppress unusedStructMember
@@ -15,10 +14,7 @@ char *get_message_content(const char *msg);
 char *get_denied_message(void);
 void *process_client(void *arg);
 int   parse_server_arguments(int argc, char *args[], thread_data_t *data);
-/*
- * Author: D'Arcy Smith
- */
-void  sigint_handler(int a);
+void  sigint_handler(int signum);
 void  process_client_with_thread(thread_data_t *data);
 
 #endif    // SERVER_H
