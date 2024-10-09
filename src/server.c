@@ -157,16 +157,25 @@ int parse_server_arguments(int argc, char *args[], thread_data_t *data)
     return 0;
 }
 
-void handle_sigint(int a)
+void sigint_handler(int a)
 {
     exit_flag = a;
 }
 
+/*
+* Author: D'Arcy Smith
+ */
 static void setup_signal_handler(void)
 {
     struct sigaction sa;
 
     memset(&sa, 0, sizeof(sa));
+
+#if defined(__clang__)
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wdisabled-macro-expansion"
+#endif
+    sa.sa_handler = sigint_handler;
 
     if(sigaction(SIGINT, &sa, NULL) == -1)
     {
