@@ -35,7 +35,6 @@ char *filter_string(const char *input_string, const size_t length, volatile sig_
     //    output_string[length] = '\0';
 
     strncpy(output_string, input_string, length);
-    output_string[length - 1] = '\0';
     for(int i = 0; (size_t)i < length; i++)
     {
         output_string[i] = (char)filter(output_string[i]);
