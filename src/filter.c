@@ -40,9 +40,6 @@ char *filter_string(const char *input_string, const size_t length, volatile sig_
         output_string[i] = (char)filter(output_string[i]);
     }
     output_string[length] = '\0';
-    printf("outputstring[length - 1] %c\n", output_string[length - 1]);
-    printf("input_string[length - 1] %c\n", input_string[length - 1]);
-    printf("output_string[length - 1] == '?' %d\n", output_string[length - 1] == '?');
 
     return output_string;
 }

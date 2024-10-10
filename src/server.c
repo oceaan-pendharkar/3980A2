@@ -26,7 +26,6 @@ char *get_message_content(const char *msg)
     }
     strncpy(msg_content, msg + 2, length - 2);
     msg_content[length - 2] = '\0';
-    printf("strlen(message_content): %d\n", (int)strlen(msg_content));
     return msg_content;
 }
 
@@ -80,7 +79,6 @@ void *process_client(void *arg)
     if(exit_flag == 0)
     {
         char *message_content = get_message_content(input);
-        printf("strlen(input): %d\n", (int)strlen(input));
         if(message_content == NULL)
         {
             exit_flag = -2;
