@@ -26,6 +26,7 @@ char *get_message_content(const char *msg)
     }
     strncpy(msg_content, msg + 2, length - 2);
     msg_content[length - 1] = '\0';
+    printf("strlen(message_content): %d\n", (int)strlen(msg_content));
     return msg_content;
 }
 
