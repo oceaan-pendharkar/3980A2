@@ -159,7 +159,10 @@ int parse_server_arguments(int argc, char *args[], thread_data_t *data)
     }
     if(argc < NUM_ARGS || !HAS_INPUT || !HAS_OUTPUT)
     {
-        printf("%d args\n", HAS_OUTPUT);
+        if(!HAS_INPUT || !HAS_OUTPUT)
+        {
+            printf("You must specify input and output fifo paths.\n");
+        }
         fprintf(stderr, "Usage: %s -i <input fifo path> -o <output fifo path>\n", arguments[0]);
         return -1;
     }
