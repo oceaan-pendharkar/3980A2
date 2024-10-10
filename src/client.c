@@ -59,7 +59,7 @@ void read_string_from_fd(const unsigned long length, const int *fd, int *err)
         *err = -4;
     }
     close(*fd);
-//    output[n_read] = '\0';
+    output[n_read] = '\0';
     printf("response from server: %s\n", output);
     free(output);
 }
