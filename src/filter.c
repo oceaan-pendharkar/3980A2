@@ -18,7 +18,7 @@ int null_filter(char character)
 }
 
 // the length passed in includes the null terminator
-char *filter_string(const char *input_string, const size_t length, volatile int *exit_flag, filter_func filter)
+char *filter_string(const char *input_string, const size_t length, volatile sig_atomic_t *exit_flag, filter_func filter)
 {
     char *output_string = (char *)malloc((length) * sizeof(char));
     if(output_string == NULL)

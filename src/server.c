@@ -45,7 +45,7 @@ void *process_client(void *arg)
     char                   *output;
     char                   *input;
     const thread_data_t    *data     = (thread_data_t *)arg;
-    volatile int           *exit_ptr = &exit_flag;
+    volatile sig_atomic_t  *exit_ptr = &exit_flag;
     ssize_t                 n_read;
 
     fd = open(data->input_fifo, O_RDONLY | O_CLOEXEC);
@@ -66,14 +66,7 @@ void *process_client(void *arg)
     n_read = read(fd, input, LIMIT);
     if(n_read == -1)
     {
-        if(errno == EINTR && exit_flag != 0)
-        {
-            printf("Exiting due to SIGINT\n");
-            free(input);
-            close(fd);
-            goto done;
-        }
-        printf("writing failed");
+        printf("reading failed");
         exit_flag = -4;
         free(input);
         close(fd);
@@ -89,6 +82,7 @@ void *process_client(void *arg)
         if(message_content == NULL)
         {
             exit_flag = -2;
+            goto done;
         }
 
         if(input[0] == 'u')
@@ -114,7 +108,7 @@ void *process_client(void *arg)
     if(fd < 0)
     {
         printf("Error opening output fifo");
-        exit_flag = -2;
+        exit_flag = -3;
     }
     else
     {
@@ -237,5 +231,5 @@ int main(int argc, char *argv[])
     free(data);
 
 done:
-    return exit_flag;
+    return (int)exit_flag;
 }
