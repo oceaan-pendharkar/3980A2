@@ -19,13 +19,13 @@ static volatile sig_atomic_t exit_flag = 0;    // NOLINT(cppcoreguidelines-avoid
 char *get_message_content(const char *msg)
 {
     const size_t length      = strlen(msg);
-    char        *msg_content = (char *)malloc((length) * sizeof(char));
+    char        *msg_content = (char *)malloc((length - 1) * sizeof(char));
     if(msg_content == NULL)
     {
         return NULL;
     }
     strncpy(msg_content, msg + 2, length - 2);
-    msg_content[length - 1] = '\0';
+    msg_content[length - 2] = '\0';
     printf("strlen(message_content): %d\n", (int)strlen(msg_content));
     return msg_content;
 }
