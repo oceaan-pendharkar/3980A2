@@ -103,6 +103,7 @@ void *process_client(void *arg)
     {
         output = get_denied_message();
     }
+    printf("output from server: %s\n", output);
 
     fd = open(data->output_fifo, O_WRONLY | O_CLOEXEC);
     if(fd < 0)
