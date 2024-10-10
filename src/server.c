@@ -80,6 +80,7 @@ void *process_client(void *arg)
     if(exit_flag == 0)
     {
         char *message_content = get_message_content(input);
+        printf("strlen(input): %d\n", (int)strlen(input));
         if(message_content == NULL)
         {
             exit_flag = -2;
