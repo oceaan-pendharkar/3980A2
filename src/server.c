@@ -51,7 +51,7 @@ void *process_client(void *arg)
     fd = open(data->input_fifo, O_RDONLY | O_CLOEXEC);
     if(fd < 0)
     {
-        printf("Error opening input fifo");
+        printf("Error opening input fifo\n");
         exit_flag = -3;
         goto done;
     }
@@ -66,7 +66,7 @@ void *process_client(void *arg)
     n_read = read(fd, input, LIMIT);
     if(n_read == -1)
     {
-        printf("reading failed");
+        printf("reading failed\n");
         exit_flag = -4;
         free(input);
         close(fd);
@@ -107,7 +107,7 @@ void *process_client(void *arg)
     fd = open(data->output_fifo, O_WRONLY | O_CLOEXEC);
     if(fd < 0)
     {
-        printf("Error opening output fifo");
+        printf("Error opening output fifo\n");
         exit_flag = -3;
     }
     else

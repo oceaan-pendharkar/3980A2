@@ -97,7 +97,7 @@ void send_server_request(Client_Settings *settings)
     settings->fd = open(settings->inputFifo, O_WRONLY | O_CLOEXEC);
     if(settings->fd < 0)
     {
-        printf("Error opening input fifo for writing");
+        printf("Error opening input fifo for writing\n");
         settings->exit_flag = -3;
         free(settings->server_input);
         return;
@@ -115,7 +115,7 @@ void receive_server_response(Client_Settings *settings)
     settings->fd = open(settings->outputFifo, O_RDONLY | O_CLOEXEC);
     if(settings->fd < 0)
     {
-        printf("Error opening output fifo for reading");
+        printf("Error opening output fifo for reading\n");
         settings->exit_flag = -3;
         return;
     }
