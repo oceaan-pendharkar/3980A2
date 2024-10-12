@@ -106,7 +106,10 @@ void *process_client(void *arg)
     {
         output = get_denied_message();
     }
-    printf("output from server: %s\n", output);
+    if(output != NULL)
+    {
+        printf("output from server: %s\n", output);
+    }
 
     fd = open(data->output_fifo, O_WRONLY | O_CLOEXEC);
     if(fd < 0)
@@ -116,9 +119,13 @@ void *process_client(void *arg)
     }
     else
     {
-        ssize_t n_wrote = write(fd, output, strlen(output));
+        ssize_t n_wrote = -1;
+        if(output != NULL)
+        {
+            n_wrote = write(fd, output, strlen(output));
+        }
 
-        if(n_wrote < 0)
+        if(!n_wrote || n_wrote < 0)
         {
             printf("writing failed\n");
             exit_flag = -4;
