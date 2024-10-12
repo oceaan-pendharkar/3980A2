@@ -113,10 +113,6 @@ void send_server_request(Client_Settings *settings)
     }
 
     write_string_to_fd(settings->server_input, &settings->fd, &settings->exit_flag);
-    if(settings->exit_flag != 0)
-    {
-        return;
-    }
 }
 
 void receive_server_response(Client_Settings *settings)
@@ -129,10 +125,6 @@ void receive_server_response(Client_Settings *settings)
         return;
     }
     read_string_from_fd(strlen(settings->message), &settings->fd, &settings->exit_flag);
-    if(settings->exit_flag != 0)
-    {
-        return;
-    }
 }
 
 // exit values
