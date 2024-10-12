@@ -54,7 +54,7 @@ void read_string_from_fd(const unsigned long length, const int *fd, int *err)
 {
     unsigned long length_to_set = length;
     char         *output;
-    const long    DENIED_LENGTH = 6;
+    const unsigned long    DENIED_LENGTH = 6;
     ssize_t       n_read;
 
     if(length_to_set < DENIED_LENGTH)
