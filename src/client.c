@@ -52,8 +52,17 @@ void write_string_to_fd(char *input, const int *fd, int *err)
 
 void read_string_from_fd(const unsigned long length, const int *fd, int *err)
 {
-    char   *output = (char *)malloc((length + 2) * sizeof(char));
-    ssize_t n_read = read(*fd, output, length + 1);
+    unsigned long length_to_set = length;
+    char         *output;
+    const long    DENIED_LENGTH = 6;
+    ssize_t       n_read;
+
+    if(length_to_set < DENIED_LENGTH)
+    {
+        length_to_set = DENIED_LENGTH;
+    }
+    output = (char *)malloc((length_to_set + 2) * sizeof(char));
+    n_read = read(*fd, output, length_to_set + 1);
     if(n_read < 0)
     {
         *err = -4;
