@@ -28,7 +28,7 @@ int   parse_arguments(int argc, char *args[], Client_Settings *settings);
 void  initialize_fifos(Client_Settings *settings);
 void  write_string_to_fd(char *input, const int *fd, int *err);
 void  read_string_from_fd(unsigned long length, const int *fd, int *err);
-char *initialize_input_string(const Client_Settings *settings, int *err);
+char *initialize_input_string(Client_Settings *settings);
 void  send_server_request(Client_Settings *settings);
 void  receive_server_response(Client_Settings *settings);
 void  cleanup(Client_Settings *settings);

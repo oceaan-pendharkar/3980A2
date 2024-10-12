@@ -73,14 +73,14 @@ void read_string_from_fd(const unsigned long length, const int *fd, int *err)
     free(output);
 }
 
-char *initialize_input_string(const Client_Settings *settings, int *err)
+char *initialize_input_string(Client_Settings *settings)
 {
     const unsigned long NUM_EXTRA_CHARS_PLUS_TERMINATOR = 4;
     char               *input                           = (char *)malloc((strlen(settings->message) + NUM_EXTRA_CHARS_PLUS_TERMINATOR) * sizeof(char));
     if(input == NULL)
     {
         printf("Memory allocation failed\n");
-        *err = -2;
+        settings->exit_flag = -2;
         return NULL;
     }
     input[0] = settings->filter_type;
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
         goto done;
     }
 
-    settings.server_input = initialize_input_string(&settings, &settings.exit_flag);
+    settings.server_input = initialize_input_string(&settings);
     if(settings.exit_flag != 0)
     {
         cleanup(&settings);
